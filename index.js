@@ -8,8 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+let actualJoke = "";
+let jokeValorationData = { joke: "", score: 0, date: new Date() };
+const jokesValorations = [];
 const $nextJokeBtn = document.getElementById("nextJokeBtn");
 $nextJokeBtn === null || $nextJokeBtn === void 0 ? void 0 : $nextJokeBtn.addEventListener("click", () => {
+    if ((jokeValorationData === null || jokeValorationData === void 0 ? void 0 : jokeValorationData.score) !== 0) {
+        jokesValorations.push(jokeValorationData);
+        jokeValorationData = { joke: "", score: 0, date: new Date() };
+        console.log({ jokesValorations });
+    }
     paintJoke();
 });
 function getJoke() {
@@ -22,7 +30,8 @@ function getJoke() {
         };
         try {
             const response = yield fetch("https://icanhazdadjoke.com/", object);
-            const jokeData = yield response.json();
+            const jokeData = (yield response.json());
+            actualJoke = jokeData.joke;
             return jokeData;
         }
         catch (error) {
@@ -39,5 +48,12 @@ function paintJoke() {
             console.log(jokeData.joke);
         }
     });
+}
+function jokeValoration(score) {
+    jokeValorationData = {
+        joke: actualJoke,
+        score,
+        date: new Date(),
+    };
 }
 paintJoke();
