@@ -1,3 +1,24 @@
+.montserrat-regular {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.montserrat-bold {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.montserrat-light {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
 body {
     width: 100%;
     min-height: 100vh;
@@ -5,21 +26,8 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: antiquewhite;
-    background-color: antiquewhite;
-}
-
-article {
-    max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 64px;
-    border-radius: 8px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-    background-color: aliceblue;
+    background-color: #FFFFFF;
+    color: #fff;
 }
 
 button {
@@ -30,17 +38,118 @@ button {
 
 button:hover {
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.backgroundImg {
+    position: absolute;
+    width: 140px;
+    aspect-ratio: 1/1;
+}
+
+.backgroundImg--1 {
+    bottom: 12%;
+    left: 12%;
+}
+
+.backgroundImg--2 {
+    top: 12%;
+    right: 12%;
+}
+
+.weather {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    gap: 8px;
+    color: #000;
+}
+
+.weather__icon {
+    width: 36px;
+    height: 36px;
+}
+
+.weather__divider {
+    width: 0px;
+    height: 24px;
+    border: 1px solid rgba(0, 0, 0, 0.7);
+}
+
+.content {
+    background: url('./public/assets/path1.svg') no-repeat;
+    background-position: center;
+    background-size: contain;
+    margin: auto;
+    max-width: 1200px;
+    width: 80vw;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 64px;
+}
+
+.content--background1 {
+    background: url('./public/assets/path1.svg') no-repeat;
+    background-position: center;
+    background-size: contain;
+
+}
+
+.content--background2 {
+    background: url('./public/assets/path2.svg') no-repeat;
+    background-position: center;
+    background-size: contain;
+
+}
+
+.content--background3 {
+    background: url('./public/assets/path3.svg') no-repeat;
+    background-position: center;
+    background-size: contain;
+
+}
+
+.content--background4 {
+    background: url('./public/assets/path4.svg') no-repeat;
+    background-position: center;
+    background-size: contain;
+
+}
+
+.content--background5 {
+    background: url('./public/assets/path5.svg') no-repeat;
+    background-position: center;
+    background-size: contain;
+
+}
+
+.content--background6 {
+    background: url('./public/assets/path6.svg') no-repeat;
+    background-position: center;
+    background-size: contain;
+
 }
 
 .valorationSection {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
-    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
 }
 
 .emojiBtn {
-    font-size: 24px;
+    font-size: 36px;
     padding: 0;
     margin: 0;
     border-radius: 50%;
@@ -51,5 +160,18 @@ button:hover {
 
 .emojiBtn:hover {
     background-color: transparent;
-    text-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.joke p {
+    margin: auto;
+    max-width: 400px;
+    width: 80%;
+    text-align: center;
+}
+
+.nextJokeBtn {
+    background-color: #F5C82E;
+    border: 1px solid #000;
+    border-radius: 64px;
 }

@@ -12,7 +12,21 @@ $nextJokeBtn?.addEventListener("click", () => {
         jokeValorationData = { joke: "", score: 0, date: new Date() };
     }
     paintJoke();
+    paintBackground();
 });
+
+function paintBackground() {
+    const $content = document.querySelector(".content");
+    const $bacgroundImg1 = document.querySelector(".backgroundImg--1");
+    const $bacgroundImg2 = document.querySelector(".backgroundImg--2");
+    if (!$content || !$bacgroundImg1 || !$bacgroundImg2) return;
+    const contentRandomClass = Math.floor(Math.random() * 6 + 1);
+    const img1RandomClass = Math.floor(Math.random() * 6 + 1);
+    const img2RandomClass = Math.floor(Math.random() * 6 + 1);
+    $content.className = `content content--background${contentRandomClass}`;
+    $bacgroundImg1.className = `backgroundImg backgroundImg--1 content--background${img1RandomClass}`;
+    $bacgroundImg2.className = `backgroundImg backgroundImg--2 content--background${img2RandomClass}`;
+}
 
 const $emojiButtons = document.querySelectorAll(".emojiBtn");
 $emojiButtons.forEach((btn, index) => {
@@ -47,7 +61,6 @@ async function paintWeather() {
     if (!$body || !$weatherArticle) return;
     $weatherArticle.innerHTML = `
             <img class="weather__icon" src=${current.condition.icon} alt="Actual weather icon">
-            <p>${location.name}</p>
             <div class="weather__divider"></div>
             <p class="weather__temp">${current.temp_c}ºC</p>
         `;
