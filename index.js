@@ -1,59 +1,78 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+import { WEATHER_API_URL, apiKey } from "./config/constants.js";
 let actualJoke = "";
 let jokeValorationData = { joke: "", score: 0, date: new Date() };
 const jokesValorations = [];
 const $nextJokeBtn = document.getElementById("nextJokeBtn");
-$nextJokeBtn === null || $nextJokeBtn === void 0 ? void 0 : $nextJokeBtn.addEventListener("click", () => {
-    if ((jokeValorationData === null || jokeValorationData === void 0 ? void 0 : jokeValorationData.score) !== 0) {
+$nextJokeBtn?.addEventListener("click", () => {
+    if (jokeValorationData?.score !== 0) {
         jokesValorations.push(jokeValorationData);
         jokeValorationData = { joke: "", score: 0, date: new Date() };
-        console.log({ jokesValorations });
     }
     paintJoke();
 });
-function getJoke() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const object = {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-            },
-        };
-        try {
-            const response = yield fetch("https://icanhazdadjoke.com/", object);
-            const jokeData = (yield response.json());
-            actualJoke = jokeData.joke;
-            return jokeData;
-        }
-        catch (error) {
-            console.log(error);
-        }
-    });
+async function getJoke() {
+    const object = {
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+        },
+    };
+    try {
+        const response = await fetch("https://icanhazdadjoke.com/", object);
+        const jokeData = await response.json();
+        actualJoke = jokeData.joke;
+        return jokeData;
+    }
+    catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
-function paintJoke() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const jokeData = yield getJoke();
-        const $joke = document.getElementById("joke");
-        if ($joke && jokeData) {
-            $joke.textContent = jokeData.joke;
-            console.log(jokeData.joke);
-        }
-    });
+async function paintJoke() {
+    const jokeData = await getJoke();
+    const $joke = document.getElementById("joke");
+    if ($joke && jokeData) {
+        $joke.textContent = jokeData.joke;
+        console.log(jokeData.joke);
+    }
 }
-function jokeValoration(score) {
+export function jokeValoration(score) {
     jokeValorationData = {
         joke: actualJoke,
         score,
         date: new Date(),
     };
 }
+async function getWeather() {
+    const options = {
+        method: "GET",
+        headers: {
+            "X-RapidAPI-Key": apiKey,
+            "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com",
+        },
+    };
+    try {
+        const response = await fetch(WEATHER_API_URL, options);
+        const weather = await response.json();
+        return weather;
+    }
+    catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+async function paintWeather() {
+    const { location, current } = await getWeather();
+    const $body = document.querySelector("body");
+    const $weatherArticle = document.querySelector(".weather");
+    if (!$body || !$weatherArticle)
+        return;
+    $weatherArticle.innerHTML = `
+            <img class="weather__icon" src=${current.condition.icon} alt="Actual weather icon">
+            <p>${location.name}</p>
+            <div class="weather__divider"></div>
+            <p class="weather__temp">${current.temp_c}ºC</p>
+        `;
+}
 paintJoke();
+paintWeather();
