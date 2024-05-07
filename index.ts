@@ -1,70 +1,42 @@
-import { WEATHER_API_URL, apiKey } from "./config/constants.js";
-import type { JokeValoration, JokeResponse, Wheather } from "./types/types";
+import { getJoke, getJoke2 } from "./api/jokes.js";
+import { getWeather } from "./api/weather.js";
+import type { JokeValoration } from "./types/types";
 
-let actualJoke: string = "";
 let jokeValorationData: JokeValoration = { joke: "", score: 0, date: new Date() };
 const jokesValorations: JokeValoration[] = [];
 
 const $nextJokeBtn = document.getElementById("nextJokeBtn") as HTMLButtonElement;
 $nextJokeBtn?.addEventListener("click", () => {
-    if (jokeValorationData?.score !== 0) {
+    if (jokeValorationData.score !== 0) {
         jokesValorations.push(jokeValorationData);
         jokeValorationData = { joke: "", score: 0, date: new Date() };
     }
     paintJoke();
 });
 
-async function getJoke(): Promise<JokeResponse> {
-    const object = {
-        method: "GET",
-        headers: {
-            Accept: "application/json",
-        },
-    };
-    try {
-        const response = await fetch("https://icanhazdadjoke.com/", object);
-        const jokeData: JokeResponse = await response.json();
-        actualJoke = jokeData.joke;
-        return jokeData;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-}
+const $emojiButtons = document.querySelectorAll(".emojiBtn");
+$emojiButtons.forEach((btn, index) => {
+    btn.addEventListener("click", () => {
+        jokeValorationData = { ...jokeValorationData, score: index + 1 };
+    });
+});
 
 async function paintJoke(): Promise<void> {
     const jokeData = await getJoke();
+    jokeValorationData.joke = jokeData.joke;
     const $joke = document.getElementById("joke");
     if ($joke && jokeData) {
-        $joke.textContent = jokeData.joke;
-        console.log(jokeData.joke);
+        $joke.innerHTML = `<p>${jokeData.joke}</p>`;
     }
 }
 
-export function jokeValoration(score: number): void {
-    jokeValorationData = {
-        joke: actualJoke,
-        score,
-        date: new Date(),
-    };
-}
-
-async function getWeather(): Promise<Wheather> {
-    const options = {
-        method: "GET",
-        headers: {
-            "X-RapidAPI-Key": apiKey,
-            "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com",
-        },
-    };
-
-    try {
-        const response = await fetch(WEATHER_API_URL, options);
-        const weather = await response.json();
-        return weather;
-    } catch (error) {
-        console.error(error);
-        throw error;
+async function paintJoke2(): Promise<void> {
+    const jokeData = await getJoke2();
+    jokeValorationData.joke = `${jokeData.setup} \n ${jokeData.punchline}`;
+    const $joke = document.getElementById("joke");
+    if ($joke && jokeData) {
+        $joke.innerHTML = `<p>${jokeData.setup}</p>
+                            <p>${jokeData.punchline}</p>`;
     }
 }
 
@@ -81,5 +53,9 @@ async function paintWeather() {
         `;
 }
 
-paintJoke();
+function onRandomPainJoke() {
+    Math.round(Math.random()) === 0 ? paintJoke() : paintJoke2();
+}
+
+onRandomPainJoke();
 paintWeather();

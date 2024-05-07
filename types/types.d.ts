@@ -3,6 +3,13 @@ export type JokeResponse = {
     joke: string;
     status: number;
 };
+export type JokeResponse2 = {
+    id: number;
+    setup: string;
+    punchline: string;
+    createdAt: string;
+    updatedAt: string;
+};
 export type JokeValoration = {
     joke: string;
     score: number;
