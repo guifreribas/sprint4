@@ -1,14 +1,5 @@
-type JokeResponse = {
-    id: string;
-    joke: string;
-    status: number;
-};
-
-type JokeValoration = {
-    joke: string;
-    score: number;
-    date: Date;
-};
+import { WEATHER_API_URL, apiKey } from "./config/constants.js";
+import type { JokeValoration, JokeResponse, Wheather } from "./types/types";
 
 let actualJoke: string = "";
 let jokeValorationData: JokeValoration = { joke: "", score: 0, date: new Date() };
@@ -19,12 +10,11 @@ $nextJokeBtn?.addEventListener("click", () => {
     if (jokeValorationData?.score !== 0) {
         jokesValorations.push(jokeValorationData);
         jokeValorationData = { joke: "", score: 0, date: new Date() };
-        console.log({ jokesValorations });
     }
     paintJoke();
 });
 
-async function getJoke(): Promise<JokeResponse | undefined> {
+async function getJoke(): Promise<JokeResponse> {
     const object = {
         method: "GET",
         headers: {
@@ -38,6 +28,7 @@ async function getJoke(): Promise<JokeResponse | undefined> {
         return jokeData;
     } catch (error) {
         console.log(error);
+        throw error;
     }
 }
 
@@ -50,7 +41,7 @@ async function paintJoke(): Promise<void> {
     }
 }
 
-function jokeValoration(score: number): void {
+export function jokeValoration(score: number): void {
     jokeValorationData = {
         joke: actualJoke,
         score,
@@ -58,4 +49,37 @@ function jokeValoration(score: number): void {
     };
 }
 
+async function getWeather(): Promise<Wheather> {
+    const options = {
+        method: "GET",
+        headers: {
+            "X-RapidAPI-Key": apiKey,
+            "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com",
+        },
+    };
+
+    try {
+        const response = await fetch(WEATHER_API_URL, options);
+        const weather = await response.json();
+        return weather;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+async function paintWeather() {
+    const { location, current } = await getWeather();
+    const $body = document.querySelector("body");
+    const $weatherArticle = document.querySelector(".weather");
+    if (!$body || !$weatherArticle) return;
+    $weatherArticle.innerHTML = `
+            <img class="weather__icon" src=${current.condition.icon} alt="Actual weather icon">
+            <p>${location.name}</p>
+            <div class="weather__divider"></div>
+            <p class="weather__temp">${current.temp_c}ºC</p>
+        `;
+}
+
 paintJoke();
+paintWeather();
